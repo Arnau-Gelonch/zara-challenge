@@ -1,11 +1,19 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CartProvider } from '@/context';
+import { Navbar } from '@/components';
+import { ProductList } from '@/pages';
 
 export const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<div>HOLA!</div>} />
-      </Routes>
-    </BrowserRouter>
+    <CartProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<ProductList />} />
+          <Route path="/product/:id" element={<div>Product Detail</div>} />
+          <Route path="/cart" element={<div>Cart</div>} />
+        </Routes>
+      </BrowserRouter>
+    </CartProvider>
   );
 };
