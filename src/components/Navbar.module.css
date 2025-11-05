@@ -56,7 +56,7 @@ html:has(body) .navbar::before {
 }
 
 .navbarContainer {
-  max-width: 1300px;
+  max-width: 100%;
   width: 100%;
   height: 100%;
   display: flex;
