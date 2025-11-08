@@ -1,1 +1,9 @@
-export type { Product, CartItem, Cart } from './product';
+export type {
+  Product,
+  CartItem,
+  Cart,
+  ProductSpecs,
+  ColorOption,
+  StorageOption,
+  SimilarProduct,
+} from './product';

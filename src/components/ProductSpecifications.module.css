@@ -1,0 +1,71 @@
+.specifications {
+  padding-top: var(--spacing-2xl);
+  padding-bottom: var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (max-width: 480px) {
+  .specifications {
+    padding-top: var(--spacing-xl);
+  }
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 300;
+  margin: 0;
+  height: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table tr {
+  border-bottom: 0.5px solid #000;
+}
+
+.table tr:first-child {
+  border-top: 0.5px solid #000;
+}
+
+.table td {
+  padding: 16px 0;
+  vertical-align: top;
+}
+
+.label {
+  width: 30%;
+  color: #000;
+  font-weight: 300;
+  font-size: 12px;
+  text-transform: uppercase;
+  vertical-align: top;
+}
+
+.value {
+  color: #000;
+  text-align: left;
+  font-weight: 300;
+  font-size: 12px;
+  vertical-align: top;
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .table td {
+    padding: 1rem 0;
+  }
+
+  .label {
+    width: 50%;
+  }
+}

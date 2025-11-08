@@ -1,0 +1,315 @@
+.productInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14rem;
+  height: calc(100vh - 80px - 44px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 834px) {
+  .productInfo {
+    gap: 2rem;
+    height: auto;
+    margin-block: var(--spacing-3xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .productInfo {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .productInfo {
+    gap: 40px;
+    margin-top: 0;
+  }
+}
+
+.imageColumn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 80px - 44px);
+  object-fit: contain;
+  display: block;
+}
+
+.imageTransition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .imageColumn {
+    position: relative;
+    top: 0;
+  }
+}
+
+.infoColumn {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  min-width: 380px;
+  gap: 64px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 834px) {
+  .infoColumn {
+    width: 362px;
+    min-width: 362px;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .infoColumn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .imageColumn {
+    width: 100%;
+  }
+}
+
+.headerGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.title {
+  font-weight: 300;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.price {
+  font-weight: 300;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.priceValueContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.priceValue {
+  display: inline-block;
+}
+
+.priceValueTransition {
+  position: absolute;
+  left: 0;
+  animation: fadeInPrice 0.3s ease-in-out;
+}
+
+@keyframes fadeInPrice {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.optionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.optionLabel {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.storageOptions {
+  display: flex;
+  gap: 0;
+}
+
+.storageButton {
+  flex: 1;
+  padding: 24px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.storageButtonActive {
+  border-color: #000;
+}
+
+@media (max-width: 480px) {
+  .storageOptions {
+    flex-wrap: nowrap;
+  }
+
+  .storageButton {
+    flex: 1;
+    min-width: 0;
+    padding: 16px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+.colorOptions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.colorOptionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.colorButtons {
+  display: flex;
+  gap: 16px;
+}
+
+.colorButton {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  box-shadow:
+    0 0 0 1px white,
+    0 0 0 2px #ccc;
+}
+
+.colorButton:hover {
+  box-shadow:
+    0 0 0 1px white,
+    0 0 0 2px #000;
+}
+
+.colorButtonActive {
+  box-shadow:
+    0 0 0 1px white,
+    0 0 0 2px #000;
+}
+
+.colorNameContainer {
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  min-height: 1.5rem;
+  min-width: 100px;
+}
+
+.colorName {
+  font-size: 12px;
+  display: block;
+  position: relative;
+}
+
+.colorNameTransition {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: fadeInColorName 0.3s ease-in-out;
+  white-space: nowrap;
+}
+
+@keyframes fadeInColorName {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.addButton {
+  width: 100%;
+  height: 56px;
+  padding: 0 2rem;
+  background-color: #f3f2f2;
+  border: none;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 300;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+  color: #c2bfbc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 834px) {
+  .addButton {
+    height: 48px;
+  }
+}
+
+.addButtonActive {
+  background-color: #1b1a18;
+  color: #ffffff;
+}
+
+.addButtonActive:active {
+  background-color: #1b1a18;
+}

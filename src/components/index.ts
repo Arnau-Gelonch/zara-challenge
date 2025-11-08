@@ -4,3 +4,6 @@ export { Searcher } from './Searcher';
 export { Loader } from './Loader';
 export { EmptyState } from './EmptyState';
 export { ErrorState } from './ErrorState';
+export { ProductInfo } from './ProductInfo';
+export { ProductSpecifications } from './ProductSpecifications';
+export { SimilarItems } from './SimilarItems';
