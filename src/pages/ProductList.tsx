@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   ProductCard,
   Searcher,
@@ -16,7 +16,7 @@ export const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadProducts = async () => {
+  const loadProducts = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -30,7 +30,7 @@ export const ProductList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm]);
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
@@ -38,7 +38,7 @@ export const ProductList = () => {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchTerm]);
+  }, [searchTerm, loadProducts]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
