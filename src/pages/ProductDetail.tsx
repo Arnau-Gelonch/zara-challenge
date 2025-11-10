@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchProductById } from '@/services';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCart } from '@/context';
+import { useProduct } from '@/hooks';
+import { fetchProductById } from '@/services';
 import {
   Loader,
   ErrorState,
@@ -10,51 +12,46 @@ import {
   SimilarItems,
 } from '@/components';
 import { ArrowIcon } from '@/assets';
-import type { Product } from '@/types';
 import styles from './ProductDetail.module.css';
 
 export const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const queryClient = useQueryClient();
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: product, isLoading, isError } = useProduct(id || '');
 
   const [selectedStorage, setSelectedStorage] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [currentImage, setCurrentImage] = useState<string>('');
 
+  // Scroll to top when id changes
   useEffect(() => {
-    const loadProduct = async () => {
-      if (!id) {
-        setError('Product ID not found');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await fetchProductById(id);
-        setProduct(data);
-
-        // No seleccionar nada por defecto
-        if (data.colorOptions && data.colorOptions.length > 0) {
-          setCurrentImage(data.colorOptions[0].imageUrl);
-        } else {
-          setCurrentImage(data.imageUrl);
-        }
-      } catch {
-        setError('Error loading product details. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProduct();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [id]);
+
+  useEffect(() => {
+    if (product) {
+      // No seleccionar nada por defecto
+      if (product.colorOptions && product.colorOptions.length > 0) {
+        setCurrentImage(product.colorOptions[0].imageUrl);
+      } else {
+        setCurrentImage(product.imageUrl);
+      }
+
+      // Prefetch similar products
+      if (product.similarProducts && product.similarProducts.length > 0) {
+        product.similarProducts.forEach(similarProduct => {
+          queryClient.prefetchQuery({
+            queryKey: ['product', similarProduct.id],
+            queryFn: () => fetchProductById(similarProduct.id),
+            staleTime: 1000 * 60 * 5, // 5 minutos
+          });
+        });
+      }
+    }
+  }, [product, queryClient]);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -82,7 +79,7 @@ export const ProductDetail = () => {
     return storageOption ? storageOption.price : product.basePrice;
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
         <Loader />
@@ -90,8 +87,10 @@ export const ProductDetail = () => {
     );
   }
 
-  if (error || !product) {
-    return <ErrorState message={error || 'Product not found'} />;
+  if (isError || !product) {
+    return (
+      <ErrorState message="Error loading product details. Please try again." />
+    );
   }
 
   return (

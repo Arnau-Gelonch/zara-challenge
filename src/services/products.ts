@@ -3,6 +3,7 @@ import type { Product } from '@/types';
 
 interface Params {
   limit?: number;
+  offset?: number;
   search?: string;
 }
 
@@ -16,6 +17,10 @@ export const fetchProducts = async (params?: Params): Promise<Response> => {
 
   if (params?.limit) {
     queryParams.append('limit', params.limit.toString());
+  }
+
+  if (params?.offset !== undefined) {
+    queryParams.append('offset', params.offset.toString());
   }
 
   if (params?.search) {
