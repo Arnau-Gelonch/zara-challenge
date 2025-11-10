@@ -1,11 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-  ProductCard,
-  Searcher,
-  Loader,
-  EmptyState,
-  ErrorState,
-} from '@/components';
+import { ProductCard, Searcher, EmptyState, ErrorState } from '@/components';
 import { fetchProducts } from '@/services';
 import type { Product } from '@/types';
 import styles from './ProductList.module.css';
@@ -18,12 +12,13 @@ export const ProductList = () => {
 
   const loadProducts = useCallback(async () => {
     try {
-      setLoading(true);
       setError(null);
+
       const response = await fetchProducts({
         limit: 20,
         search: searchTerm || undefined,
       });
+
       setProducts(response.data);
     } catch {
       setError('Error loading products. Please try again.');
@@ -55,22 +50,12 @@ export const ProductList = () => {
         <p className={styles.resultsCount}>{products.length} RESULTS</p>
       </div>
 
-      {loading && (
-        <div className={styles.loadingContainer}>
-          <Loader />
-        </div>
-      )}
-
       {error && <ErrorState message={error} />}
 
-      {!loading && !error && (
+      {!error && (
         <div className={styles.productGrid}>
           {products.map((product, index) => (
-            <ProductCard
-              key={`${product.id}-${index}`}
-              product={product}
-              style={{ '--card-index': index } as React.CSSProperties}
-            />
+            <ProductCard key={`${product.id}-${index}`} product={product} />
           ))}
         </div>
       )}
