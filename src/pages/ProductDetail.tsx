@@ -58,7 +58,13 @@ export const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    addToCart(product);
+
+    const productToAdd = {
+      ...product,
+      imageUrl: currentImage,
+    };
+
+    addToCart(productToAdd);
   };
 
   const handleColorChange = (index: number) => {

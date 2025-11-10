@@ -16,11 +16,6 @@
   --color-error: #d32f2f;
   --color-overlay: #666;
 
-  /* Breakpoints */
-  --breakpoint-mobile: 480px;
-  --breakpoint-tablet: 834px;
-  --breakpoint-desktop: 1200px;
-
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;

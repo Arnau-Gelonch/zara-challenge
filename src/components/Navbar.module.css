@@ -104,3 +104,15 @@ html:has(body) .navbar::before {
   letter-spacing: 0%;
   text-transform: uppercase;
 }
+
+.cartIconOnCartPage {
+  display: none;
+
+  @media (max-width: 834px) and (min-width: calc(480px + 1px)) {
+    display: flex;
+  }
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}

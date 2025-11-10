@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from '@/context';
 import { Navbar } from '@/components';
-import { ProductList, ProductDetail } from '@/pages';
+import { ProductList, ProductDetail, Cart } from '@/pages';
 
 export const App = () => {
   return (
@@ -11,7 +11,7 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<ProductList />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/cart" element={<div>Cart</div>} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>
