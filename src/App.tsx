@@ -8,7 +8,7 @@ export const App = () => {
   return (
     <TanStackProvider>
       <CartProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/zara-challenge">
           <Navbar />
           <Routes>
             <Route path="/" element={<ProductList />} />
