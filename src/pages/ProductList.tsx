@@ -9,7 +9,6 @@ export const ProductList = () => {
 
   const { data, isLoading, isError } = useProducts({ search: debouncedSearch });
 
-  // Debounce search term
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       setDebouncedSearch(searchTerm);

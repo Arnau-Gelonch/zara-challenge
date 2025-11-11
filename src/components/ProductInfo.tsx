@@ -78,8 +78,14 @@ export const ProductInfo = ({
     <div className={styles.productInfo}>
       <div className={styles.imageColumn}>
         <div className={styles.imageContainer}>
-          <img src={displayImage} alt={product.name} className={styles.image} />
-          {isTransitioning && (
+          {displayImage && (
+            <img
+              src={displayImage}
+              alt={product.name}
+              className={styles.image}
+            />
+          )}
+          {isTransitioning && currentImage && (
             <img
               src={currentImage}
               alt={product.name}
