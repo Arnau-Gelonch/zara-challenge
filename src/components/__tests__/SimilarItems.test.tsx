@@ -1,7 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SimilarItems } from '../SimilarItems';
 import type { SimilarProduct } from '@/types';
+
+jest.mock('@/utils/api', () => ({
+  axiosInstance: {
+    get: jest.fn(),
+    defaults: { baseURL: 'http://localhost:3000' },
+    interceptors: {
+      request: { use: jest.fn() },
+      response: { use: jest.fn() },
+    },
+  },
+}));
 
 const mockProducts: SimilarProduct[] = [
   {
@@ -40,7 +52,19 @@ beforeEach(() => {
 
 describe('SimilarItems', () => {
   const renderWithRouter = (component: React.ReactElement) => {
-    return render(<BrowserRouter>{component}</BrowserRouter>);
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    });
+
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </QueryClientProvider>
+    );
   };
 
   it('should render similar items title', () => {

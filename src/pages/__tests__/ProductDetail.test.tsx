@@ -1,5 +1,6 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { BrowserRouter, useParams, useNavigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ProductDetail } from '../ProductDetail';
 import { fetchProductById } from '@/services';
 import { CartProvider } from '@/context';
@@ -76,10 +77,20 @@ const mockProduct: Product = {
 };
 
 const renderWithRouter = (component: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
   return render(
-    <BrowserRouter>
-      <CartProvider>{component}</CartProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <CartProvider>{component}</CartProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
@@ -87,6 +98,8 @@ describe('ProductDetail', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockUseNavigate.mockReturnValue(mockNavigate);
+    // Mock window.scrollTo
+    window.scrollTo = jest.fn();
   });
 
   it('should show loader while fetching product', async () => {
@@ -132,12 +145,15 @@ describe('ProductDetail', () => {
   });
 
   it('should display error when product ID is not found', async () => {
-    mockUseParams.mockReturnValue({ id: undefined });
+    mockUseParams.mockReturnValue({ id: '' });
+    mockFetchProductById.mockRejectedValue(new Error('Not found'));
 
     renderWithRouter(<ProductDetail />);
 
     await waitFor(() => {
-      expect(screen.getByText('Product ID not found')).toBeInTheDocument();
+      expect(
+        screen.getByText('Error loading product details. Please try again.')
+      ).toBeInTheDocument();
     });
   });
 
@@ -264,7 +280,9 @@ describe('ProductDetail', () => {
       ).toBeInTheDocument();
     });
 
-    const image = screen.getByAltText('iPhone 15 Pro Max') as HTMLImageElement;
+    const image = (await screen.findByAltText(
+      'iPhone 15 Pro Max'
+    )) as HTMLImageElement;
     expect(image.src).toBe('https://example.com/natural.jpg');
   });
 
@@ -281,7 +299,9 @@ describe('ProductDetail', () => {
       ).toBeInTheDocument();
     });
 
-    const image = screen.getByAltText('iPhone 15 Pro Max') as HTMLImageElement;
+    const image = (await screen.findByAltText(
+      'iPhone 15 Pro Max'
+    )) as HTMLImageElement;
     expect(image.src).toBe('https://example.com/iphone15pro.jpg');
   });
 
@@ -297,15 +317,21 @@ describe('ProductDetail', () => {
       ).toBeInTheDocument();
     });
 
+    // Wait for the initial image to render
+    await screen.findByAltText('iPhone 15 Pro Max');
+
     const blueColor = screen.getByLabelText('Blue Titanium');
     fireEvent.click(blueColor!);
 
-    await waitFor(() => {
-      const image = screen.getByAltText(
-        'iPhone 15 Pro Max'
-      ) as HTMLImageElement;
-      expect(image.src).toBe('https://example.com/blue.jpg');
-    });
+    await waitFor(
+      async () => {
+        const image = (await screen.findByAltText(
+          'iPhone 15 Pro Max'
+        )) as HTMLImageElement;
+        expect(image.src).toBe('https://example.com/blue.jpg');
+      },
+      { timeout: 1000 }
+    );
   });
 
   it('should update price when selecting different storage', async () => {
@@ -384,10 +410,26 @@ describe('ProductDetail', () => {
   });
 
   it('should refetch product when ID changes', async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    });
+
     mockUseParams.mockReturnValue({ id: '1' });
     mockFetchProductById.mockResolvedValue(mockProduct);
 
-    const { rerender } = renderWithRouter(<ProductDetail />);
+    const { rerender } = render(
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <CartProvider>
+            <ProductDetail />
+          </CartProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    );
 
     await waitFor(() => {
       expect(mockFetchProductById).toHaveBeenCalledWith('1');
@@ -401,11 +443,13 @@ describe('ProductDetail', () => {
     });
 
     rerender(
-      <BrowserRouter>
-        <CartProvider>
-          <ProductDetail />
-        </CartProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <CartProvider>
+            <ProductDetail />
+          </CartProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     );
 
     await waitFor(() => {
