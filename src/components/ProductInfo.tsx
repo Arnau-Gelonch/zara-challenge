@@ -26,6 +26,7 @@ export const ProductInfo = ({
   const [hoveredColor, setHoveredColor] = useState<string | null>(null);
   const [displayImage, setDisplayImage] = useState(currentImage);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const currentPrice = getPrice();
   const [displayPrice, setDisplayPrice] = useState(currentPrice);
@@ -42,6 +43,13 @@ export const ProductInfo = ({
     useState(false);
 
   useEffect(() => {
+    // En el primer render, solo actualizar la imagen sin transición
+    if (isFirstRender) {
+      setDisplayImage(currentImage);
+      setIsFirstRender(false);
+      return;
+    }
+
     if (currentImage !== displayImage) {
       setIsTransitioning(true);
       const timer = setTimeout(() => {
@@ -50,7 +58,7 @@ export const ProductInfo = ({
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [currentImage, displayImage]);
+  }, [currentImage, displayImage, isFirstRender]);
 
   useEffect(() => {
     if (currentPrice !== displayPrice) {
