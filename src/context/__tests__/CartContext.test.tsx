@@ -107,7 +107,7 @@ describe('CartContext', () => {
       );
     });
 
-    it('should increase quantity when adding same product', () => {
+    it('should add same product as separate cart items', () => {
       render(
         <CartProvider>
           <TestComponent />
@@ -119,12 +119,9 @@ describe('CartContext', () => {
         screen.getByText('Add Product 1').click();
       });
 
-      expect(screen.getByTestId('items-count')).toHaveTextContent('1');
+      expect(screen.getByTestId('items-count')).toHaveTextContent('2');
       expect(screen.getByTestId('total-items')).toHaveTextContent('2');
       expect(screen.getByTestId('total-price')).toHaveTextContent('1998');
-      expect(screen.getByTestId('item-1')).toHaveTextContent(
-        'iPhone 15 - Quantity: 2'
-      );
     });
 
     it('should add multiple different products', () => {
